@@ -2,9 +2,11 @@ package iot.lviv.ua.model.entity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@Table(name = "director")
 public class Director{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,5 +74,21 @@ public class Director{
 
     public void setDirectedFilms(Set<Film> directedFilms) {
         this.directedFilms = directedFilms;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Director)) return false;
+        Director director = (Director) o;
+        return Objects.equals(getId(), director.getId()) &&
+                Objects.equals(getName(), director.getName()) &&
+                Objects.equals(getSurname(), director.getSurname()) &&
+                Objects.equals(getDirectedFilms(), director.getDirectedFilms());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getSurname(), getDirectedFilms());
     }
 }

@@ -2,22 +2,42 @@ package iot.lviv.ua.model.entity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.Objects;
 
 @Entity
+@Table(name = "review")
 public class Review{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "points")
     private Integer points;
-    @Column(name = "text")
-    private String text;
-    @Column(name = "film_id")
-    private Integer filmId;
+    @Column(name = "text_of_review")
+    private String textOfReview;
+
+    @ManyToOne
+    @JoinColumn(name = "film_id", referencedColumnName = "id", nullable = false)
+    private Film film;
+
     @Column(name = "user_id")
     private Integer userId;
 
     public Review() {
+    }
+
+    public Review(Integer id, Integer points, String textOfReview, Film film, Integer userId) {
+        this.id = id;
+        this.points = points;
+        this.textOfReview = textOfReview;
+        this.film = film;
+        this.userId = userId;
+    }
+
+    public Review(Integer id, Integer points, String textOfReview, Integer userId) {
+        this.id = id;
+        this.points = points;
+        this.textOfReview = textOfReview;
+        this.userId = userId;
     }
 
     public Integer getId() {
@@ -36,28 +56,12 @@ public class Review{
         this.points = points;
     }
 
-    public String getText() {
-        return text;
+    public String getTextOfReview() {
+        return textOfReview;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Review(Integer id, Integer points, String text, Integer filmId, Integer userId) {
-        this.id = id;
-        this.points = points;
-        this.text = text;
-        this.filmId = filmId;
-        this.userId = userId;
-    }
-
-    public Integer getFilmId() {
-        return filmId;
-    }
-
-    public void setFilmId(Integer filmId) {
-        this.filmId = filmId;
+    public void setTextOfReview(String text) {
+        this.textOfReview = text;
     }
 
     public Integer getUserId() {
@@ -73,9 +77,34 @@ public class Review{
         return "Review{" +
                 "id=" + id +
                 ", points=" + points +
-                ", text='" + text + '\'' +
-                ", filmId=" + filmId +
+                ", text='" + textOfReview + '\'' +
+                ", filmId=" + film.getId() +
                 ", userId=" + userId +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Review)) return false;
+        Review review = (Review) o;
+        return getId().equals(review.getId()) &&
+                Objects.equals(getPoints(), review.getPoints()) &&
+                Objects.equals(getTextOfReview(), review.getTextOfReview()) &&
+                Objects.equals(getFilm(), review.getFilm()) &&
+                Objects.equals(getUserId(), review.getUserId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getPoints(), getTextOfReview(), getFilm(), getUserId());
+    }
+
+    public Film getFilm() {
+        return film;
+    }
+
+    public void setFilm(Film film) {
+        this.film = film;
     }
 }

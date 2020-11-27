@@ -212,14 +212,15 @@ public class View{
         actor.setSurname(SCANNER.nextLine());
         return actor;
     }
-    public Review inputReview(){
+    public Review inputReview() throws SQLException {
         Review actor = new Review(null, null, null, null, null);
         System.out.print("POINTS: ");
         actor.setPoints(Integer.parseInt(SCANNER.nextLine()));
         System.out.print("TEXT: ");
-        actor.setText(SCANNER.nextLine());
+        actor.setTextOfReview(SCANNER.nextLine());
         System.out.print("FILM ID: ");
-        actor.setFilmId((Integer.parseInt(SCANNER.nextLine())));
+        Integer newId = (Integer.parseInt(SCANNER.nextLine()));
+        actor.setFilm(filmController.findOne(newId));
         System.out.print("USER ID: ");
         actor.setUserId((Integer.parseInt(SCANNER.nextLine())));
         return actor;

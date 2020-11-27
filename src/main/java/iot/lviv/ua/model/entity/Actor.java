@@ -7,6 +7,7 @@ import javax.persistence.*;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -103,5 +104,22 @@ public class Actor{
 
     public void setFilms(Set<Film> films) {
         this.films = films;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Actor)) return false;
+        Actor actor = (Actor) o;
+        return getId().equals(actor.getId()) &&
+                Objects.equals(getAppendix(), actor.getAppendix()) &&
+                Objects.equals(getName(), actor.getName()) &&
+                Objects.equals(getSurname(), actor.getSurname()) &&
+                Objects.equals(getFilms(), actor.getFilms());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getAppendix(), getName(), getSurname(), getFilms());
     }
 }

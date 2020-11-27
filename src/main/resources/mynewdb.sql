@@ -134,13 +134,10 @@ CREATE TABLE review (
   PRIMARY KEY (id),
   CONSTRAINT `fk_review_film`
     FOREIGN KEY (film_id)
-    REFERENCES film (id),
-  CONSTRAINT `fk_review_user`
-    FOREIGN KEY (user_id)
-    REFERENCES user (id));
+    REFERENCES film (id));
+
 
 CREATE INDEX fk_review_film_idx ON review (film_id);
-CREATE INDEX fk_review_user_idx ON review (user_id);
 
 -- user_secuirty
 

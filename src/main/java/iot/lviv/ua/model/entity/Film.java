@@ -4,9 +4,12 @@ import org.checkerframework.checker.units.qual.C;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.Objects;
 import java.util.Set;
+import iot.lviv.ua.model.entity.Review;
 
 @Entity
+@Table(name = "film")
 public class Film{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +32,9 @@ public class Film{
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "films")
     private Set<Actor> actors;
 
+    @OneToMany(mappedBy = "film", fetch =FetchType.EAGER)
+    private Set<Review> reviews;
+
     public Film() {
     }
 
@@ -49,6 +55,17 @@ public class Film{
         this.countryOfOrigin = countryOfOrigin;
         this.director = director;
         this.actors = actors;
+    }
+
+    public Film(Integer id, String title, String description, Integer publishYear, Country countryOfOrigin, Director director, Set<Actor> actors, Set<Review> reviews) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.publishYear = publishYear;
+        this.countryOfOrigin = countryOfOrigin;
+        this.director = director;
+        this.actors = actors;
+        this.reviews = reviews;
     }
 
 
@@ -118,5 +135,32 @@ public class Film{
 
     public void setActors(Set<Actor> actors) {
         this.actors = actors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Film)) return false;
+        Film film = (Film) o;
+        return getId().equals(film.getId()) &&
+                Objects.equals(getTitle(), film.getTitle()) &&
+                Objects.equals(getDescription(), film.getDescription()) &&
+                Objects.equals(getPublishYear(), film.getPublishYear()) &&
+                Objects.equals(getCountryOfOrigin(), film.getCountryOfOrigin()) &&
+                Objects.equals(getDirector(), film.getDirector()) &&
+                Objects.equals(getActors(), film.getActors());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getTitle(), getDescription(), getPublishYear(), getCountryOfOrigin(), getDirector(), getActors());
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
     }
 }

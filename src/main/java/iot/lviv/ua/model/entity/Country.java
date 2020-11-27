@@ -2,6 +2,7 @@ package iot.lviv.ua.model.entity;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -64,5 +65,21 @@ public class Country{
 
     public void setFilms(Set<Film> films) {
         this.films = films;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Country)) return false;
+        Country country = (Country) o;
+        return Objects.equals(getId(), country.getId()) &&
+                Objects.equals(getName(), country.getName()) &&
+                Objects.equals(getPresident(), country.getPresident()) &&
+                Objects.equals(getFilms(), country.getFilms());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPresident(), getFilms());
     }
 }
