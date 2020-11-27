@@ -62,13 +62,16 @@ CREATE TABLE film (
   title VARCHAR(45) NULL DEFAULT NULL,
   description LONGTEXT NULL DEFAULT NULL,
   publish_year INT NULL DEFAULT NULL,
-  origin_country VARCHAR(45) NULL DEFAULT NULL,
+  country_id INT NULL DEFAULT NULL,
   director_id INT NOT NULL,
   PRIMARY KEY (id),
 
   CONSTRAINT `fk_film_director`
     FOREIGN KEY (director_id)
-    REFERENCES director (id));
+    REFERENCES director (id),
+  CONSTRAINT `fk_film_country`
+    FOREIGN KEY (country_id)
+    REFERENCES country(id));
 
 CREATE INDEX fk_film_director_idx ON film (director_id);
 
@@ -221,17 +224,17 @@ INSERT INTO director (id, name, surname) VALUES
 (10, 'Aurel', 'Chipianu');
 
 
-INSERT INTO film (id, title, description, publish_year, origin_country, director_id) VALUES
-(6, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 'MOLDOVA', 1),
-(7, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 'POLAND', 3),
-(8, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 'MOLDOVA', 1),
-(9, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 'POLAND', 3),
-(10, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 'MOLDOVA', 1),
-(11, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 'POLAND', 3),
-(12, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 'MOLDOVA', 1),
-(13, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 'POLAND', 3),
-(14, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 'MOLDOVA', 1),
-(15, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 'POLAND', 3);
+INSERT INTO film (id, title, description, publish_year, country_id, director_id) VALUES
+(6, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 2, 1),
+(7, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 3, 3),
+(8, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 6, 1),
+(9, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 7, 3),
+(10, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 7, 1),
+(11, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 7, 3),
+(12, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 7, 1),
+(13, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 8, 3),
+(14, 'STEUA FARA NUME', 'Filmul mai bun', 1968, 7, 1),
+(15, 'W CIEMNOSCI', 'To jest fajny filmik', 2001, 4, 3);
 
 INSERT INTO film_fact (id, film_id, fact) VALUES
 (11, 11, 'Filmul e mai asteapta pentru copiii'),

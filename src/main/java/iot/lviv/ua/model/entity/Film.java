@@ -22,7 +22,7 @@ public class Film{
     private Integer publishYear;
 
     @ManyToOne
-    @JoinColumn(name = "origin_country", referencedColumnName = "name", nullable = false)
+    @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = false)
     private Country countryOfOrigin;
 
     @ManyToOne

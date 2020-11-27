@@ -1,7 +1,6 @@
 package iot.lviv.ua.model.entity;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.util.Objects;
 import java.util.Set;
 
