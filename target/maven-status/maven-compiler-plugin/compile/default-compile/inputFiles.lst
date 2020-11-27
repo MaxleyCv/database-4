@@ -13,8 +13,10 @@
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/dao/impl/CountryDao.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/entity/Director.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/Connector.java
+/home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/dao/impl/AbstractDaoImpl.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/dao/impl/DirectorDao.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/controller/impl/ReviewController.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/App.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/dao/AbstractDao.java
+/home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/HibernateUtil.java
 /home/maxley/iot-projects-2/database/lab4/military-base/src/main/java/iot/lviv/ua/model/entity/Country.java

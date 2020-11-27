@@ -1,11 +1,24 @@
 package iot.lviv.ua.model.entity;
 
-public class Review {
+import javax.persistence.*;
+import javax.persistence.Entity;
+
+@Entity
+public class Review{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "points")
     private Integer points;
+    @Column(name = "text")
     private String text;
+    @Column(name = "film_id")
     private Integer filmId;
+    @Column(name = "user_id")
     private Integer userId;
+
+    public Review() {
+    }
 
     public Integer getId() {
         return id;

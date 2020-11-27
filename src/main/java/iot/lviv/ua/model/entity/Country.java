@@ -1,9 +1,32 @@
 package iot.lviv.ua.model.entity;
 
-public class Country {
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.Set;
+
+@Entity
+@Table(name = "country")
+public class Country{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "president")
     private String president;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "countryOfOrigin")
+    private Set<Film> films;
+
+    public Country(Integer id, String name, String president, Set<Film> films) {
+        this.id = id;
+        this.name = name;
+        this.president = president;
+        this.films = films;
+    }
+
+    public Country() {
+    }
 
     public Integer getId() {
         return id;
@@ -33,5 +56,13 @@ public class Country {
 
     public void setPresident(String president) {
         this.president = president;
+    }
+
+    public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
     }
 }

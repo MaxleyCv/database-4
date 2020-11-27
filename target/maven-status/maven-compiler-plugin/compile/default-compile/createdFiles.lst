@@ -1,6 +1,8 @@
 iot/lviv/ua/model/dao/AbstractDao.class
+iot/lviv/ua/HibernateUtil.class
 iot/lviv/ua/model/entity/Review.class
 iot/lviv/ua/model/dao/impl/DirectorDao.class
+iot/lviv/ua/model/dao/impl/AbstractDaoImpl.class
 iot/lviv/ua/controller/AbstractController.class
 iot/lviv/ua/view/View.class
 iot/lviv/ua/controller/impl/ActorController.class

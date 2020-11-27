@@ -1,10 +1,51 @@
 package iot.lviv.ua.model.entity;
 
-public class Actor {
+import org.checkerframework.checker.index.qual.IndexFor;
+import org.hibernate.mapping.*;
+
+import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.util.Set;
+
+@Entity
+@Table(name = "actor")
+public class Actor{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name="appendix")
     private String appendix;
+    @Column(name="name")
     private String name;
+    @Column(name="surname")
     private String surname;
+
+    @ManyToMany
+    @JoinTable(
+            name = "film_has_actor",
+            joinColumns = @JoinColumn(
+                    name = "film_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "actor_id",
+                    referencedColumnName = "id"
+            )
+    )
+    private Set<Film> films;
+
+    public Actor(Integer id, String appendix, String name, String surname, Set<Film> films) {
+        this.id = id;
+        this.appendix = appendix;
+        this.name = name;
+        this.surname = surname;
+        this.films = films;
+    }
+
+    public Actor() {
+    }
 
     public Integer getId() {
         return id;
@@ -53,5 +94,14 @@ public class Actor {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';
+    }
+
+
+    public Set<Film> getFilms() {
+        return films;
+    }
+
+    public void setFilms(Set<Film> films) {
+        this.films = films;
     }
 }

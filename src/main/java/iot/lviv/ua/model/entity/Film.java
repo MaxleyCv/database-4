@@ -1,20 +1,71 @@
 package iot.lviv.ua.model.entity;
 
-public class Film {
-    private Integer id;
-    private String title;
-    private String description;
-    private Integer publishYear;
-    private String countryOfOrigin;
-    private Integer directorId;
+import org.checkerframework.checker.units.qual.C;
 
-    public Film(Integer id, String title, String description, Integer publishYear, String countryOfOrigin, Integer directorId) {
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.Set;
+
+@Entity
+public class Film{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "title")
+    private String title;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "publish_year")
+    private Integer publishYear;
+
+    @ManyToOne
+    @JoinColumn(name = "origin_country", referencedColumnName = "name", nullable = false)
+    private Country countryOfOrigin;
+
+    @ManyToOne
+    @JoinColumn(name = "director_id", referencedColumnName = "id", nullable = false)
+    private Director director;
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "films")
+    private Set<Actor> actors;
+
+    public Film() {
+    }
+
+    public Film(Integer id, String title, String description, Integer publishYear, Country countryOfOrigin, Director director) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.publishYear = publishYear;
         this.countryOfOrigin = countryOfOrigin;
-        this.directorId = directorId;
+        this.director = director;
+    }
+
+    public Film(Integer id, String title, String description, Integer publishYear, Country countryOfOrigin, Director director, Set<Actor> actors) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.publishYear = publishYear;
+        this.countryOfOrigin = countryOfOrigin;
+        this.director = director;
+        this.actors = actors;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", publishYear=" + publishYear +
+                ", countryOfOrigin='" + countryOfOrigin.getName() + '\'' +
+                ", director=" + director.getSurname() +
+                '}';
+    }
+
+    public void setCountryOfOrigin(Country countryOfOrigin) {
+        this.countryOfOrigin = countryOfOrigin;
     }
 
     public Integer getId() {
@@ -49,31 +100,23 @@ public class Film {
         this.publishYear = publishYear;
     }
 
-    public String getCountryOfOrigin() {
+    public Country getCountryOfOrigin() {
         return countryOfOrigin;
     }
 
-    public void setCountryOfOrigin(String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
+    public Director getDirector() {
+        return director;
     }
 
-    public Integer getDirectorId() {
-        return directorId;
+    public void setDirector(Director director) {
+        this.director = director;
     }
 
-    public void setDirectorId(Integer directorId) {
-        this.directorId = directorId;
+    public Set<Actor> getActors() {
+        return actors;
     }
 
-    @Override
-    public String toString() {
-        return "Film{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", publishYear=" + publishYear +
-                ", countryOfOrigin='" + countryOfOrigin + '\'' +
-                ", directorId=" + directorId +
-                '}';
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
     }
 }

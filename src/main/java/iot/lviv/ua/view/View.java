@@ -3,10 +3,12 @@ package iot.lviv.ua.view;
 
 import iot.lviv.ua.controller.AbstractController;
 import iot.lviv.ua.controller.impl.*;
+import iot.lviv.ua.model.entity.*;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class View{
@@ -23,7 +25,7 @@ public class View{
         do {
             try {
                 this.showBase();
-                input = SCANNER.next();
+                input = SCANNER.nextLine();
                 System.out.println(input);
                 this.react(input.toCharArray());
             } catch (Exception ignored) {
@@ -65,59 +67,174 @@ public class View{
 
     public void react(char[] commands) throws SQLException {
         int previous = 0;
-        StringBuilder command = new StringBuilder();
+
         ArrayList<String> parsed = new ArrayList<String>();
         for(int i = 0; i < commands.length; i++){
-                System.out.print(commands[i]);
-                if (commands[i] == ' ') {
+
+                if (commands[i] == ' ' || i == commands.length - 1) {
+                    String command = "";
                     for (int oneWordIndex = previous; oneWordIndex < i; oneWordIndex++) {
-                        command.append(commands[oneWordIndex]);
+                        command = command + (commands[oneWordIndex]);
                     }
-                    previous = i;
-                    parsed.add(command.toString());
+                    previous = i + 1;
+                    if (i == commands.length - 1){
+                        command = command + commands[i];
+                    }
+                    parsed.add(command);
+
                 }
         }
-        System.out.println(
-        this.countryController.findOne(0).toString());
-//        AbstractController<?> commandClass = this.getClassFromString("parsed.get(0)");
-//        commandClass.findAll();
+        System.out.println(parsed);
+        System.out.println(this.filmController.findAll());
+        implementQuery(parsed);
     }
 
     private AbstractController<?> getClassFromString(String a){
-        if (a.equals("country")) {
-            return this.countryController;
+        switch (a){
+            case "film": return this.filmController;
+            case "country": return this.countryController;
+            case "review": return this.reviewController;
+            case "director": return this.directorController;
+            case "actor": return this.actorController;
+            default: return null;
         }
-        else {
-            return this.filmController;
+    }
+
+    private Object getEntity(String a) throws SQLException {
+        switch (a){
+            case "film": return this.inputFilm();
+            case "country": return this.inputCountry();
+            case "review": return this.inputReview();
+            case "director": return this.inputDirector();
+            case "actor": return this.inputActor();
+            default: return null;
         }
     }
 
 
-//    private class MethodImplementer<T>{
-//
-//        public ArrayList<T> findAll(AbstractController<T> controller) throws SQLException {
-//            return controller.findAll();
-//        }
-//
-//        public T findOne(AbstractController<T> controller, Integer id) throws SQLException {
-//            return controller.findOne(id);
-//        }
-//
-//        public void create(AbstractController<T> controller, T entity) throws SQLException {
-//            controller.create(entity);
-//        }
-//
-//        public void update(AbstractController<T> controller, Integer id, T entity) throws SQLException {
-//            controller.update(id, entity);
-//        }
-//
-//        public void delete(AbstractController<T> controller, Integer id) throws SQLException {
-//            controller.delete(id);
-//        }
-//
-//
-//    }
 
+    private void implementQuery(ArrayList<String> command) throws SQLException {
+
+        switch (command.get(1)){
+            case "GETALL": {
+                switch (command.get(0)){
+                    case "film": System.out.println(this.filmController.findAll()); break;
+                    case "country": System.out.println(this.countryController.findAll()); break;
+                    case "review": System.out.println(this.reviewController.findAll()); break;
+                    case "director": System.out.println(this.directorController.findAll()); break;
+                    case "actor": System.out.println(this.actorController.findAll()); break;
+                    default: System.out.println("INVALID CLASS"); break;
+                }
+                break;
+            }
+            case "GET": {
+                Integer id = (Integer.parseInt(command.get(2)));
+                switch (command.get(0)){
+                    case "film": System.out.println(this.filmController.findOne(id)); break;
+                    case "country": System.out.println(this.countryController.findOne(id)); break;
+                    case "review": System.out.println(this.reviewController.findOne(id)); break;
+                    case "director": System.out.println(this.directorController.findOne(id)); break;
+                    case "actor": System.out.println(this.actorController.findOne(id)); break;
+                    default: System.out.println("INVALID CLASS");
+                    break;
+                }
+                break;
+            }
+            case "UPDATE":{
+                Integer id = (Integer.parseInt(command.get(2)));
+                switch (command.get(0)){
+                    case "film": this.filmController.update(id, (Film) this.getEntity("film")); break;
+                    case "country": this.countryController.update(id, (Country) this.getEntity("country")); break;
+                    case "review": this.reviewController.update(id, (Review) this.getEntity("review")); break;
+                    case "director": this.directorController.update(id, (Director) this.getEntity("director")); break;
+                    case "actor": this.actorController.update(id, (Actor) this.getEntity("actor")); break;
+                    default: System.out.println("INVALID CLASS");
+                    break;
+                }
+                break;
+            }
+            case "CREATE":{
+                switch (command.get(0)){
+                    case "film": this.filmController.create((Film) this.getEntity("film")); break;
+                    case "country": this.countryController.create((Country) this.getEntity("country")); break;
+                    case "review": this.reviewController.create((Review) this.getEntity("review")); break;
+                    case "director": this.directorController.create((Director) this.getEntity("director")); break;
+                    case "actor": this.actorController.create((Actor) this.getEntity("actor")); break;
+                    default: System.out.println("INVALID CLASS"); break;
+                }
+                break;
+            }
+            case "DELETE":{
+                Integer id = (Integer.parseInt(command.get(2)));
+                Objects.requireNonNull(this.getClassFromString(command.get(0))).delete(id);
+                System.out.println("DELETED");
+                break;
+            }
+            default:{
+                System.out.println(command.get(1));
+                break;
+            }
+        }
+        return;
+    }
+
+    public Film inputFilm() throws SQLException {
+        Film actor = new Film(null, null, null, null, null, null);
+        System.out.print("TITLE: ");
+        actor.setTitle(SCANNER.nextLine());
+        System.out.print("DESCRIPTION: ");
+        actor.setDescription(SCANNER.nextLine());
+        System.out.print("YEAR: ");
+        actor.setPublishYear(Integer.parseInt(SCANNER.nextLine()));
+        System.out.print("COUNTRY ID: ");
+        Integer newCountryId = Integer.parseInt(SCANNER.nextLine());
+        actor.setCountryOfOrigin(countryController.findOne(newCountryId));
+        System.out.print("DIRECTOR ID: ");
+        Integer newDirectorId = Integer.parseInt(SCANNER.nextLine());
+        actor.setDirector(directorController.findOne(newDirectorId));
+        return actor;
+    }
+
+    public Country inputCountry(){
+        Country actor = new Country(null, null, null);
+        System.out.print("NAME: ");
+        actor.setName(SCANNER.nextLine());
+        System.out.print("PRESIDENT: ");
+        actor.setPresident(SCANNER.nextLine());
+        return actor;
+    }
+
+    public Director inputDirector(){
+        Director actor = new Director(null, null, null);
+        System.out.print("NAME: ");
+        actor.setName(SCANNER.nextLine());
+        System.out.print("SURNAME: ");
+        actor.setSurname(SCANNER.nextLine());
+        return actor;
+    }
+    public Review inputReview(){
+        Review actor = new Review(null, null, null, null, null);
+        System.out.print("POINTS: ");
+        actor.setPoints(Integer.parseInt(SCANNER.nextLine()));
+        System.out.print("TEXT: ");
+        actor.setText(SCANNER.nextLine());
+        System.out.print("FILM ID: ");
+        actor.setFilmId((Integer.parseInt(SCANNER.nextLine())));
+        System.out.print("USER ID: ");
+        actor.setUserId((Integer.parseInt(SCANNER.nextLine())));
+        return actor;
+    }
+
+    public Actor inputActor(){
+        Actor actor = new Actor(null, null, null, null);
+        System.out.print("NAME: ");
+        actor.setName(SCANNER.nextLine());
+        System.out.print("SURNAME: ");
+        actor.setSurname(SCANNER.nextLine());
+        System.out.print("APPENDIX: ");
+        actor.setAppendix(SCANNER.nextLine());
+        return actor;
+    }
 
 }
 

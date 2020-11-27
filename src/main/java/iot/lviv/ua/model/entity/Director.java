@@ -1,14 +1,36 @@
 package iot.lviv.ua.model.entity;
 
-public class Director {
+import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.Set;
+
+@Entity
+public class Director{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
+
+    @OneToMany (mappedBy = "director", fetch =FetchType.EAGER)
+    private Set<Film> directedFilms;
 
     public Director(Integer id, String name, String surname) {
         this.id = id;
         this.name = name;
         this.surname = surname;
+    }
+
+    public Director(Integer id, String name, String surname, Set<Film> directedFilms) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.directedFilms = directedFilms;
+    }
+
+    public Director() {
     }
 
     public Integer getId() {
@@ -42,5 +64,13 @@ public class Director {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';
+    }
+
+    public Set<Film> getDirectedFilms() {
+        return directedFilms;
+    }
+
+    public void setDirectedFilms(Set<Film> directedFilms) {
+        this.directedFilms = directedFilms;
     }
 }
